@@ -1,0 +1,48 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# AI File Manager — Python Dependencies
+# Install: pip install -r requirements.txt
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Core Framework ────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.7.0
+pyyaml>=6.0
+
+# ── LLM (Phi-3 Mini via llama-cpp-python) ────────────────────────────────────
+# For CUDA (RTX 2050): install with CUDA support
+# pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu121
+llama-cpp-python>=0.2.57
+
+# ── Vision (Qwen2-VL-2B) ─────────────────────────────────────────────────────
+transformers>=4.40.0
+torch>=2.2.0
+torchvision>=0.17.0
+accelerate>=0.29.0
+Pillow>=10.3.0
+
+# 4-bit quantization (optional but recommended for RTX 2050)
+bitsandbytes>=0.43.0
+
+# ── Audio (faster-whisper) ────────────────────────────────────────────────────
+faster-whisper>=1.0.0
+
+# ── PDF Processing ────────────────────────────────────────────────────────────
+pymupdf>=1.24.0          # PyMuPDF (imports as `fitz`)
+pytesseract>=0.3.10      # Tesseract OCR wrapper (requires tesseract binary)
+
+# ── Document Parsing ──────────────────────────────────────────────────────────
+python-docx>=1.1.0
+python-pptx>=0.6.23
+openpyxl>=3.1.2
+beautifulsoup4>=4.12.0
+
+# ── Embeddings + Clustering ───────────────────────────────────────────────────
+sentence-transformers>=2.7.0
+faiss-cpu>=1.8.0
+scikit-learn>=1.4.0
+numpy>=1.26.0
+
+# ── Utilities ────────────────────────────────────────────────────────────────
+tqdm>=4.66.0
+colorama>=0.4.6           # Windows terminal colour support

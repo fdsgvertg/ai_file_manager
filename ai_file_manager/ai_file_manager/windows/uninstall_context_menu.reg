@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+; ─────────────────────────────────────────────────────────────────────────────
+; AI File Manager — Uninstall Right-Click Context Menu
+; Double-click this file to remove the Explorer context menu entries.
+; ─────────────────────────────────────────────────────────────────────────────
+
+[-HKEY_CLASSES_ROOT\Directory\shell\AIFileManager]
+[-HKEY_CLASSES_ROOT\Directory\Background\shell\AIFileManager]

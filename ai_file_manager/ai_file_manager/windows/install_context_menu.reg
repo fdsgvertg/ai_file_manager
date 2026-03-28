@@ -1,0 +1,28 @@
+Windows Registry Editor Version 5.00
+
+; ─────────────────────────────────────────────────────────────────────────────
+; AI File Manager — Windows Explorer Right-Click Context Menu
+;
+; HOW TO USE:
+;   1. Edit the path in "Icon" and the command below to match your install dir.
+;   2. Double-click this .reg file to merge it into the registry.
+;   3. Right-click any folder in Explorer → "Sort using AI File Manager"
+;
+; TO UNINSTALL: Run uninstall_context_menu.reg (provided below)
+; ─────────────────────────────────────────────────────────────────────────────
+
+; ── Context menu for folders (right-click on folder) ─────────────────────────
+[HKEY_CLASSES_ROOT\Directory\shell\AIFileManager]
+@="Sort using AI File Manager"
+"Icon"="C:\\ai_file_manager\\windows\\icon.ico"
+
+[HKEY_CLASSES_ROOT\Directory\shell\AIFileManager\command]
+@="cmd.exe /c \"C:\\ai_file_manager\\windows\\sort_files.bat\" \"%1\""
+
+; ── Context menu for folder background (right-click inside folder) ────────────
+[HKEY_CLASSES_ROOT\Directory\Background\shell\AIFileManager]
+@="Sort using AI File Manager"
+"Icon"="C:\\ai_file_manager\\windows\\icon.ico"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\AIFileManager\command]
+@="cmd.exe /c \"C:\\ai_file_manager\\windows\\sort_files.bat\" \"%V\""

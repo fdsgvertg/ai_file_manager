@@ -1,0 +1,104 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# AI File Manager — Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+
+project:
+  name: "AI File Manager"
+  version: "1.0.0"
+  log_level: "INFO"          # DEBUG | INFO | WARNING | ERROR
+  log_dir: "logs"
+
+# ─── Model Paths ─────────────────────────────────────────────────────────────
+models:
+  # Phi-3 Mini quantized (GGUF format for llama-cpp-python)
+  llm:
+    path: "models/weights/phi-3-mini-4k-instruct-q4.gguf"
+    n_ctx: 4096
+    n_gpu_layers: 20          # Tune based on VRAM; RTX 2050 has 4 GB
+    n_threads: 6
+    temperature: 0.1
+    max_tokens: 512
+    repeat_penalty: 1.1
+
+  # Qwen2-VL 2B (HuggingFace)
+  vision:
+    model_id: "Qwen/Qwen2-VL-2B-Instruct"
+    device: "cuda"            # falls back to cpu if unavailable
+    load_in_4bit: true        # bitsandbytes 4-bit quant
+    max_new_tokens: 256
+
+  # Whisper Small via faster-whisper
+  audio:
+    model_size: "small"       # tiny | base | small | medium
+    device: "cuda"
+    compute_type: "int8"      # float16 | int8 | int8_float16
+    language: null            # null = auto-detect
+
+  # Sentence-Transformers embedding model
+  embedding:
+    model_id: "BAAI/bge-small-en-v1.5"
+    device: "cpu"             # Keep on CPU to save VRAM for vision/LLM
+    batch_size: 32
+
+# ─── Processing ──────────────────────────────────────────────────────────────
+processing:
+  image:
+    extensions: [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".webp", ".heic"]
+    max_size_mb: 20
+    resize_max_px: 1024       # Resize before sending to vision model
+
+  pdf:
+    extensions: [".pdf"]
+    max_pages: 10             # Limit pages parsed per PDF
+    ocr_dpi: 150
+    ocr_lang: "eng"
+
+  audio:
+    extensions: [".mp3", ".wav", ".flac", ".ogg", ".m4a", ".aac", ".opus"]
+    max_duration_sec: 600     # 10 min cap
+
+  video:
+    extensions: [".mp4", ".avi", ".mkv", ".mov", ".wmv", ".flv", ".webm"]
+    frames_to_extract: 5      # Number of representative frames
+    max_duration_sec: 3600
+
+  document:
+    extensions: [".txt", ".md", ".csv", ".json", ".xml", ".html", ".docx", ".pptx", ".xlsx"]
+    max_chars: 8000           # Truncate before sending to LLM
+
+# ─── Clustering ──────────────────────────────────────────────────────────────
+clustering:
+  algorithm: "kmeans"         # kmeans | dbscan | agglomerative
+  n_clusters_auto: true       # Auto-determine k via elbow method
+  min_cluster_size: 2         # DBSCAN: minimum cluster size
+  eps: 0.5                    # DBSCAN: epsilon
+  confidence_threshold: 0.55  # Below this → "misc" folder
+
+# ─── Folder Naming ───────────────────────────────────────────────────────────
+folders:
+  misc_name: "Miscellaneous"
+  max_name_length: 40
+  date_format: "%Y-%m"        # Month-level grouping (e.g. 2024-03)
+  level2_map:
+    images:   "Images"
+    pdfs:     "PDFs"
+    audio:    "Audio"
+    video:    "Video"
+    document: "Documents"
+    unknown:  "Other"
+
+# ─── API Server ──────────────────────────────────────────────────────────────
+api:
+  host: "127.0.0.1"
+  port: 8765
+  workers: 1
+
+# ─── Undo ────────────────────────────────────────────────────────────────────
+undo:
+  history_dir: ".undo_history"
+  max_sessions: 10            # Keep last N undo snapshots
+
+# ─── Concurrency ─────────────────────────────────────────────────────────────
+concurrency:
+  max_workers: 3              # ThreadPoolExecutor workers
+  gpu_semaphore: 1            # Only 1 GPU-bound task at a time
